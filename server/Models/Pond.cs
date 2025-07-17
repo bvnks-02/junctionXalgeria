@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
@@ -7,20 +9,10 @@ public class Pond
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    [StringLength(100)]
-    public string Name { get; set; } = default!;
+    [Required, MaxLength(100)]
+    public string Name { get; set; }
 
-    [StringLength(200)]
-    public string Location { get; set; } = default!;
-
-    public double AreaInSquareMeters { get; set; }
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public string? Notes { get; set; }
-
-    public virtual ICollection<SensorReading> SensorReadings { get; set; } = new List<SensorReading>();
-
-    public virtual ICollection<Alert> Alerts { get; set; } = new List<Alert>();
+    public ICollection<SensorReading> SensorReadings { get; set; }
+    public ICollection<Threshold> Thresholds { get; set; }
+    public ICollection<Alert> Alerts { get; set; }
 }

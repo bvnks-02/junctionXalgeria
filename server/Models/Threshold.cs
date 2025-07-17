@@ -1,14 +1,24 @@
-namespace Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Models;
 public class Threshold
 {
+    [Key]
     public int Id { get; set; }
 
-    public string SensorType { get; set; } = default!; // e.g., "Temperature"
+    [Required, MaxLength(50)]
+    public string Parameter { get; set; }
 
-    public double Min { get; set; }
-    public double Max { get; set; }
+    [Required]
+    public double MinValue { get; set; }
 
+    [Required]
+    public double MaxValue { get; set; }
+
+    [ForeignKey("Pond")]
     public int PondId { get; set; }
-    public Pond Pond { get; set; } = default!;
+
+    public Pond Pond { get; set; }
 }
+
