@@ -1,24 +1,13 @@
 namespace Dtos;
 
-public class CreateThresholdDto
-{
-    public int PondId { get; set; }
-    public float? MinTemperatureC { get; set; }
-    public float? MaxTemperatureC { get; set; }
-    public float? MinDissolvedOxygenMgL { get; set; }
-    public float? MaxDissolvedOxygenMgL { get; set; }
-    public float? MinPH { get; set; }
-    public float? MaxPH { get; set; }
-}
-
-public class ReadThresholdDto
+public class ThresholdDto
 {
     public int Id { get; set; }
-    public float? MinTemperatureC { get; set; }
-    public float? MaxTemperatureC { get; set; }
-    public float? MinDissolvedOxygenMgL { get; set; }
-    public float? MaxDissolvedOxygenMgL { get; set; }
-    public float? MinPH { get; set; }
-    public float? MaxPH { get; set; }
-    public DateTime CreatedAt { get; set; }
+
+    public string SensorType { get; set; } = default!;
+
+    public double Min { get; set; }
+    public double Max { get; set; }
+
+    public int PondId { get; set; }
 }

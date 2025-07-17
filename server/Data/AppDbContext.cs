@@ -10,9 +10,10 @@ public class AppDbContext : DbContext
 
     public DbSet<Pond> Ponds => Set<Pond>();
     public DbSet<SensorReading> SensorReadings => Set<SensorReading>();
-    public DbSet<Threshold> Thresholds => Set<Threshold>();
     public DbSet<Alert> Alerts => Set<Alert>();
-
+    
+    public DbSet<Threshold> Thresholds => Set<Threshold>();
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -30,14 +31,10 @@ public class AppDbContext : DbContext
         var threshold = new Threshold
         {
             Id = 1,
-            PondId = 1,
-            MinTemperatureC = 22,
-            MaxTemperatureC = 30,
-            MinDissolvedOxygenMgL = 4,
-            MaxDissolvedOxygenMgL = 8,
-            MinPH = 6.5f,
-            MaxPH = 8.5f,
-            CreatedAt = DateTime.UtcNow
+            SensorType = "Temperature",
+            Min = 20.0,
+            Max = 30.0,
+            PondId = pond.Id
         };
 
         var reading = new SensorReading

@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Data;
 using Dtos;
 using Models;
 
-namespace Controllers;
+namespace server.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/thresholds")]
 public class ThresholdController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -18,58 +17,39 @@ public class ThresholdController : ControllerBase
     }
 
     [HttpGet("{pondId}")]
-    public async Task<ActionResult<ReadThresholdDto>> GetByPond(int pondId)
+    public IActionResult GetByPond(int pondId)
     {
-        var threshold = await _context.Thresholds
+        var thresholds = _context.Thresholds
             .Where(t => t.PondId == pondId)
-            .OrderByDescending(t => t.CreatedAt)
-            .FirstOrDefaultAsync();
+            .Select(t => new ThresholdDto
+            {
+                Id = t.Id,
+                SensorType = t.SensorType,
+                Min = t.Min,
+                Max = t.Max,
+                PondId = t.PondId
+            })
+            .ToList();
 
-        if (threshold == null) return NotFound();
-
-        return Ok(new ReadThresholdDto
-        {
-            Id = threshold.Id,
-            MinTemperatureC = threshold.MinTemperatureC,
-            MaxTemperatureC = threshold.MaxTemperatureC,
-            MinDissolvedOxygenMgL = threshold.MinDissolvedOxygenMgL,
-            MaxDissolvedOxygenMgL = threshold.MaxDissolvedOxygenMgL,
-            MinPH = threshold.MinPH,
-            MaxPH = threshold.MaxPH,
-            CreatedAt = threshold.CreatedAt
-        });
+        return Ok(thresholds);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ReadThresholdDto>> Create(CreateThresholdDto dto)
+    public IActionResult Create(ThresholdDto dto)
     {
         var threshold = new Threshold
         {
-            PondId = dto.PondId,
-            MinTemperatureC = dto.MinTemperatureC,
-            MaxTemperatureC = dto.MaxTemperatureC,
-            MinDissolvedOxygenMgL = dto.MinDissolvedOxygenMgL,
-            MaxDissolvedOxygenMgL = dto.MaxDissolvedOxygenMgL,
-            MinPH = dto.MinPH,
-            MaxPH = dto.MaxPH,
-            CreatedAt = DateTime.UtcNow
+            SensorType = dto.SensorType,
+            Min = dto.Min,
+            Max = dto.Max,
+            PondId = dto.PondId
         };
 
         _context.Thresholds.Add(threshold);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
 
-        var result = new ReadThresholdDto
-        {
-            Id = threshold.Id,
-            MinTemperatureC = threshold.MinTemperatureC,
-            MaxTemperatureC = threshold.MaxTemperatureC,
-            MinDissolvedOxygenMgL = threshold.MinDissolvedOxygenMgL,
-            MaxDissolvedOxygenMgL = threshold.MaxDissolvedOxygenMgL,
-            MinPH = threshold.MinPH,
-            MaxPH = threshold.MaxPH,
-            CreatedAt = threshold.CreatedAt
-        };
+        dto.Id = threshold.Id;
 
-        return CreatedAtAction(nameof(GetByPond), new { pondId = dto.PondId }, result);
+        return CreatedAtAction(nameof(GetByPond), new { pondId = dto.PondId }, dto);
     }
 }
