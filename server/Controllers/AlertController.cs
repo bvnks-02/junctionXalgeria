@@ -16,9 +16,17 @@ public class AlertController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10)
     {
+        if (pageNumber < 1 || pageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0.");
+        }
+
         var alerts = await _context.Alerts
+            .OrderByDescending(a => a.Timestamp)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .Select(a => new {
                 a.Id,
                 a.Parameter,
