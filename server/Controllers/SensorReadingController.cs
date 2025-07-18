@@ -31,15 +31,6 @@ public class SensorReadingController : ControllerBase
             query = query.Where(r => r.PondId == pondId.Value);
         }
 
-        var totalItems = await query.CountAsync();
-
-        if (totalItems == 0 && pondId.HasValue)
-        {
-            return NotFound("No readings found for the specified PondId.");
-        }
-
-        var totalPages = (int)System.Math.Ceiling(totalItems / (double)pageSize);
-
         var readings = await query
             .OrderByDescending(r => r.Timestamp) // Sort from last created to earliest
             .Skip((pageNumber - 1) * pageSize)
@@ -52,15 +43,6 @@ public class SensorReadingController : ControllerBase
                 r.PondId
             }).ToListAsync();
 
-        var response = new
-        {
-            TotalItems = totalItems,
-            TotalPages = totalPages,
-            CurrentPage = pageNumber,
-            PageSize = pageSize,
-            Items = readings
-        };
-
-        return Ok(response);
+        return Ok(readings);
     }
 }

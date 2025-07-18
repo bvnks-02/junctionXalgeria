@@ -39,7 +39,8 @@ public class SensorAnalysisService : ISensorAnalysisService
                 Parameter = reading.Parameter,
                 Value = reading.Value,
                 Timestamp = reading.Timestamp,
-                PondId = reading.PondId
+                PondId = reading.PondId,
+                Severity = threshold.Severity
             };
 
             _db.Alerts.Add(alert);

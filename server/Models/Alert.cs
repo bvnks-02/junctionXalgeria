@@ -10,9 +10,11 @@ public class Alert
 
     [Required, MaxLength(50)]
     public string Parameter { get; set; }
-
     [Required]
     public double Value { get; set; }
+
+    [Required]
+    public string Severity { get; set; } // "Warning", "Critical", etc.
 
     [Required]
     public DateTime Timestamp { get; set; }

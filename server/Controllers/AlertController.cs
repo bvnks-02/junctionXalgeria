@@ -27,31 +27,35 @@ public class AlertController : ControllerBase
             .OrderByDescending(a => a.Timestamp)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(a => new {
+            .Select(a => new
+            {
                 a.Id,
                 a.Parameter,
                 a.Value,
                 a.Timestamp,
-                a.PondId
+                a.PondId,
+                a.Severity
             }).ToListAsync();
 
         return Ok(alerts);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var alert = await _context.Alerts
-            .Where(a => a.Id == id)
-            .Select(a => new {
-                a.Id,
-                a.Parameter,
-                a.Value,
-                a.Timestamp,
-                a.PondId
-            }).FirstOrDefaultAsync();
+    // [HttpGet("{id}")]
+    // public async Task<IActionResult> GetById(int id)
+    // {
+    //     var alert = await _context.Alerts
+    //         .Where(a => a.Id == id)
+    //         .Select(a => new
+    //         {
+    //             a.Id,
+    //             a.Parameter,
+    //             a.Value,
+    //             a.Timestamp,
+    //             a.PondId,
+    //             a.Severity
+    //         }).FirstOrDefaultAsync();
 
-        if (alert == null) return NotFound();
-        return Ok(alert);
-    }
+    //     if (alert == null) return NotFound();
+    //     return Ok(alert);
+    // }
 }

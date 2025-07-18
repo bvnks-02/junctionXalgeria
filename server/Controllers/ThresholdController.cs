@@ -30,20 +30,20 @@ public class ThresholdController : ControllerBase
         return Ok(thresholds);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var threshold = await _context.Thresholds
-            .Where(t => t.Id == id)
-            .Select(t => new {
-                t.Id,
-                t.Parameter,
-                t.MinValue,
-                t.MaxValue,
-                t.PondId
-            }).FirstOrDefaultAsync();
+    // [HttpGet("{id}")]
+    // public async Task<IActionResult> GetById(int id)
+    // {
+    //     var threshold = await _context.Thresholds
+    //         .Where(t => t.Id == id)
+    //         .Select(t => new {
+    //             t.Id,
+    //             t.Parameter,
+    //             t.MinValue,
+    //             t.MaxValue,
+    //             t.PondId
+    //         }).FirstOrDefaultAsync();
 
-        if (threshold == null) return NotFound();
-        return Ok(threshold);
-    }
+    //     if (threshold == null) return NotFound();
+    //     return Ok(threshold);
+    // }
 }

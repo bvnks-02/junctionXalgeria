@@ -11,10 +11,12 @@ public class Threshold
     public string Parameter { get; set; }
 
     [Required]
+    public double MaxValue { get; set; }
+    [Required]
     public double MinValue { get; set; }
 
     [Required]
-    public double MaxValue { get; set; }
+    public string Severity { get; set; } // "Warning", "Critical", etc.
 
     [ForeignKey("Pond")]
     public int PondId { get; set; }
