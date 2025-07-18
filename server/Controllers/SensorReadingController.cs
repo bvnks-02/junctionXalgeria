@@ -17,7 +17,7 @@ public class SensorReadingController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int? pondId = null, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> Get([FromQuery] int? pondId = null, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? parameter = null)
     {
         if (pageNumber <= 0 || pageSize <= 0)
         {
@@ -31,11 +31,17 @@ public class SensorReadingController : ControllerBase
             query = query.Where(r => r.PondId == pondId.Value);
         }
 
+        if (parameter is not null)
+        {
+            query = query.Where(r => r.Parameter == parameter);
+        }
+
         var readings = await query
             .OrderByDescending(r => r.Timestamp) // Sort from last created to earliest
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(r => new {
+            .Select(r => new
+            {
                 r.Id,
                 r.Parameter,
                 r.Value,
@@ -45,4 +51,75 @@ public class SensorReadingController : ControllerBase
 
         return Ok(readings);
     }
+
+    [HttpGet("grouped-by-parameter")]
+    public async Task<IActionResult> GetGroupedByParameter([FromQuery] int? pondId = null)
+    {
+        var cutoff = DateTime.UtcNow.AddDays(-3);
+
+        var query = _context.SensorReadings
+            .Where(r => r.Timestamp >= cutoff);
+
+        if (pondId.HasValue)
+        {
+            query = query.Where(r => r.PondId == pondId.Value);
+        }
+
+        var grouped = await query
+            .Select(r => new
+            {
+                r.Parameter,
+                r.Value,
+                r.Timestamp,
+            })
+            .OrderByDescending(r => r.Timestamp)
+            .ToListAsync();
+
+        var result = grouped
+            .GroupBy(r => r.Parameter)
+            .ToDictionary(g => g.Key, g => g.Select(r => new
+            {
+                r.Value,
+                r.Timestamp
+            }).ToList());
+
+        return Ok(result);
+    }
+
+
+[HttpGet("latest-by-parameter")]
+    public async Task<IActionResult> GetLatestByParameter([FromQuery] int? pondId = null)
+    {
+        var cutoff = DateTime.UtcNow.AddDays(-3);
+
+        var query = _context.SensorReadings
+            .Where(r => r.Timestamp >= cutoff);
+
+        if (pondId.HasValue)
+        {
+            query = query.Where(r => r.PondId == pondId.Value);
+        }
+
+        var grouped = await query
+            .Select(r => new
+            {
+                r.Parameter,
+                r.Value,
+                r.Timestamp,
+            })
+            .OrderByDescending(r => r.Timestamp)
+            .ToListAsync();
+
+        var result = grouped
+            .GroupBy(r => r.Parameter)
+            .ToDictionary(g => g.Key, g => g.Select(r => new
+            {
+                r.Value,
+                r.Timestamp
+            }).FirstOrDefault());
+
+        return Ok(result);
+    }
+
+
 }
