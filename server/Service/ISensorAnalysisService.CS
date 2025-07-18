@@ -2,6 +2,6 @@ using Models;
 
 public interface ISensorAnalysisService
 {
-    public void OnNewSensorReading(SensorReading reading);
+    public Task OnNewSensorReading(SensorReading reading);
     
 }
