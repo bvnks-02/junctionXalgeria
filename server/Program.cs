@@ -11,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ISensorAnalysisService, SensorAnalysisService>();
+builder.Services.AddHostedService<SensorSimulationWorker>();
+
 var app = builder.Build();
 
 // Auto-create and seed DB
