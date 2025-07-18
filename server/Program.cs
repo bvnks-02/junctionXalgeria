@@ -12,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ISensorAnalysisService, SensorAnalysisService>();
+builder.Services.AddScoped<INotificationService, NotificationServiceMock>();
+// builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddHostedService<SensorSimulationWorker>();
 
 var app = builder.Build();

@@ -37,7 +37,18 @@ public class SensorSimulationWorker : BackgroundService
 
                 foreach (var param in parameters)
                 {
-                    var value = GenerateRandomValue(param);
+                    double value;
+                    if (param is "AeromonasHydrophila" or "StreptococcusIniae" or "FrancisellaOrientalis" or 
+                        "Flavobacterium" or "VibrioSpp" or "PseudomonasSpp" or "LactococcusGarvieae" or 
+                        "ProvidenciaVermicola" or "StaphylococcusSpp")
+                    {
+                        value = _random.NextDouble() < 0.9 ? 0 : _random.NextDouble() * 5; // 90% chance of 0, otherwise small value
+                    }
+                    else
+                    {
+                        value = GenerateRandomValue(param);
+                    }
+
                     var reading = new SensorReading
                     {
                         Parameter = param,
@@ -47,7 +58,7 @@ public class SensorSimulationWorker : BackgroundService
                     };
 
                     db.SensorReadings.Add(reading);
-                    analysis.OnNewSensorReading(reading);
+                    await analysis.OnNewSensorReading(reading);
                 }
             }
 
