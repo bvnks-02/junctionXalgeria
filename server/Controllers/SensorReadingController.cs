@@ -30,18 +30,18 @@ public class SensorReadingController : ControllerBase
         return Ok(readings);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [HttpGet("{pondId}")]
+    public async Task<IActionResult> GetById(int pondId)
     {
-        var reading = await _context.SensorReadings
-            .Where(r => r.Id == id)
+        var reading = _context.SensorReadings
+            .Where(r => r.PondId == pondId)
             .Select(r => new {
                 r.Id,
                 r.Parameter,
                 r.Value,
                 r.Timestamp,
                 r.PondId
-            }).FirstOrDefaultAsync();
+            }).ToList();
 
         if (reading == null) return NotFound();
         return Ok(reading);
