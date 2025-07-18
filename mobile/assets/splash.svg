@@ -1,0 +1,7 @@
+<svg width="1242" height="2436" viewBox="0 0 1242 2436" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1242" height="2436" fill="#1761B0"/>
+  <path d="M621 1318C763.385 1318 879 1202.38 879 1060C879 917.615 763.385 802 621 802C478.615 802 363 917.615 363 1060C363 1202.38 478.615 1318 621 1318Z" fill="#F8F9FA" stroke="#F8F9FA" stroke-width="10"/>
+  <path d="M621 1250C725.934 1250 811 1164.93 811 1060C811 955.066 725.934 870 621 870C516.066 870 431 955.066 431 1060C431 1164.93 516.066 1250 621 1250Z" fill="#1761B0" stroke="#F8F9FA" stroke-width="10"/>
+  <path d="M621 1180C687.885 1180 742 1125.89 742 1059C742 992.115 687.885 938 621 938C554.115 938 500 992.115 500 1059C500 1125.89 554.115 1180 621 1180Z" fill="#F8F9FA" stroke="#F8F9FA" stroke-width="10"/>
+  <text x="621" y="1600" font-family="Arial" font-size="80" text-anchor="middle" fill="#F8F9FA">Aqua Monitor</text>
+</svg>
