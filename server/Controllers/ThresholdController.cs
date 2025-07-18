@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using Data;
-using Dtos;
-using Models;
-
-namespace server.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 [ApiController]
-[Route("api/thresholds")]
+[Route("api/[controller]")]
 public class ThresholdController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -16,40 +15,35 @@ public class ThresholdController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("{pondId}")]
-    public IActionResult GetByPond(int pondId)
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        var thresholds = _context.Thresholds
-            .Where(t => t.PondId == pondId)
-            .Select(t => new ThresholdDto
-            {
-                Id = t.Id,
-                SensorType = t.SensorType,
-                Min = t.Min,
-                Max = t.Max,
-                PondId = t.PondId
-            })
-            .ToList();
+        var thresholds = await _context.Thresholds
+            .Select(t => new {
+                t.Id,
+                t.Parameter,
+                t.MinValue,
+                t.MaxValue,
+                t.PondId
+            }).ToListAsync();
 
         return Ok(thresholds);
     }
 
-    [HttpPost]
-    public IActionResult Create(ThresholdDto dto)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var threshold = new Threshold
-        {
-            SensorType = dto.SensorType,
-            Min = dto.Min,
-            Max = dto.Max,
-            PondId = dto.PondId
-        };
+        var threshold = await _context.Thresholds
+            .Where(t => t.Id == id)
+            .Select(t => new {
+                t.Id,
+                t.Parameter,
+                t.MinValue,
+                t.MaxValue,
+                t.PondId
+            }).FirstOrDefaultAsync();
 
-        _context.Thresholds.Add(threshold);
-        _context.SaveChanges();
-
-        dto.Id = threshold.Id;
-
-        return CreatedAtAction(nameof(GetByPond), new { pondId = dto.PondId }, dto);
+        if (threshold == null) return NotFound();
+        return Ok(threshold);
     }
 }
