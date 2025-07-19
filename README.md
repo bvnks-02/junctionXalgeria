@@ -34,9 +34,8 @@ The platform combines:
 
 ```
 .
-├── junctionXalgeria.sln           # Solution file (optional global)
-├── mobile/                        # React Native Expo app
 ├── server/                        # ASP.NET Core backend
+├── mobile/                        # React Native Expo app
 ├── web/                           # Optional frontend (Next.js)
 └── README.md                      # This file
 ```
