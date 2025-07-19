@@ -15,25 +15,46 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.aquamonitor",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "fetch"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1761B0"
-      }
+      },
+      "permissions": [
+        "WAKE_LOCK",
+        "RECEIVE_BOOT_COMPLETED"
+      ],
+      "package": "com.anonymous.aquamonitor"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      [
-        "expo-notifications",
+           [
+        "expo-background-fetch",
         {
-          "icon": "./assets/notification-icon.png",
-          "color": "#1761B0"
+          "ios": { "minimumOSVersion": "14" }
+        }
+      ],
+      [
+        "expo-task-manager",
+        {
+          "ios": { "minimumOSVersion": "14" }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2def0ea7-f74e-4f9b-b2e7-eb39ffd4e2a7"
+      }
+    }
   }
 }

@@ -20,6 +20,9 @@ export const REFRESH_INTERVAL = 5000;
 // Background fetch interval for alerts (15 minutes)
 export const BACKGROUND_FETCH_INTERVAL = 15 * 60 * 1000;
 
+export const DEFAULT_PAGE_NUMBER = 1;
+export const DEFAULT_PAGE_SIZE = 10
+
 // Parameter units and thresholds
 export const PARAMETER_UNITS: Record<string, ParameterUnit> = {
   Temperature: {

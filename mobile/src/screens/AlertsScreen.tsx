@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { fetchAlerts, fetchPonds } from '../api';
 import { Alert, Pond } from '../types';
-import { COLORS } from '../utils/constants';
+import { COLORS, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../utils/constants';
 import AlertItem from '../components/AlertItem';
 import { getAlertSeverity } from '../utils/notifications';
-
+import * as Notifications from 'expo-notifications';
 interface AlertsScreenProps {
   navigation: any;
 }
@@ -35,7 +35,10 @@ const AlertsScreen: React.FC<AlertsScreenProps> = () => {
   // Load alerts from the last 24 hours
   const loadAlerts = async () => {
     try {
-      const alertsData = await fetchAlerts();
+      const alertsData = await fetchAlerts({
+        pageNumber: DEFAULT_PAGE_NUMBER,
+        pageSize: DEFAULT_PAGE_SIZE
+      });
       
       // Add severity to each alert
       const processedAlerts = alertsData.map(alert => ({

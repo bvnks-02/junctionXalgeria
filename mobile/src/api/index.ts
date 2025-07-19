@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Alert, Pond, SensorReading } from '../types';
+import { Alert, AlertDTO, Pond, SensorReading, SensorReadingDTO } from '../types';
 
 // Base URL for the API
 const API_BASE_URL = 'https://f1419a489960.ngrok-free.app/api';
@@ -9,13 +9,14 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 1, // Skip ngrok browser warning
   },
 });
 
 // API functions
 export const fetchPonds = async (): Promise<Pond[]> => {
   try {
-    const response = await api.get('/pond');
+    const response = await api.get('/Pond');
     return response.data;
   } catch (error) {
     console.error('Error fetching ponds:', error);
@@ -23,9 +24,9 @@ export const fetchPonds = async (): Promise<Pond[]> => {
   }
 };
 
-export const fetchSensorReadings = async (pondId?: number): Promise<SensorReading[]> => {
+export const fetchSensorReadings = async (query: SensorReadingDTO): Promise<SensorReading[]> => {
   try {
-    const url = pondId ? `/sensorreading/${pondId}` : '/sensorreading';
+    const url = `/SensorReading?pondId=${query.pondId}&pageNumber=${query.pageNumber}&pageSize=${query.pageSize}&${query.parameter ? `parameter=${query.parameter}` : ''}`;
     const response = await api.get(url);
     return response.data;
   } catch (error) {
@@ -34,9 +35,9 @@ export const fetchSensorReadings = async (pondId?: number): Promise<SensorReadin
   }
 };
 
-export const fetchAlerts = async (pondId?: number): Promise<Alert[]> => {
+export const fetchAlerts = async (query: AlertDTO, pondID?: number): Promise<Alert[]> => {
   try {
-    const url = pondId ? `/alert/${pondId}` : '/alert';
+    const url = `/Alert?pageNumber=${query.pageNumber}&pageSize=${query.pageSize}`;
     const response = await api.get(url);
     
     // Filter alerts from the last 24 hours
@@ -45,7 +46,7 @@ export const fetchAlerts = async (pondId?: number): Promise<Alert[]> => {
     
     return response.data.filter((alert: Alert) => {
       const alertDate = new Date(alert.timestamp);
-      return alertDate >= oneDayAgo;
+      return alertDate >= oneDayAgo && (!pondID || alert.pondId === pondID);
     });
   } catch (error) {
     console.error('Error fetching alerts:', error);

@@ -4,13 +4,15 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchPonds, fetchSensorReadings } from '../api';
 import { Pond, SensorReading } from '../types';
-import { COLORS, REFRESH_INTERVAL, PARAMETER_CATEGORIES } from '../utils/constants';
+import { COLORS, REFRESH_INTERVAL, PARAMETER_CATEGORIES, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../utils/constants';
 import MetricCard from '../components/MetricCard';
 import PondSelector from '../components/PondSelector';
 
 interface HomeScreenProps {
   navigation: any;
 }
+
+
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [ponds, setPonds] = useState<Pond[]>([]);
@@ -41,7 +43,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     if (selectedPondId === null) return;
     
     try {
-      const readingsData = await fetchSensorReadings(selectedPondId);
+      const readingsData = await fetchSensorReadings({ pondId: selectedPondId, pageNumber: DEFAULT_PAGE_NUMBER, pageSize: DEFAULT_PAGE_SIZE });
       setReadings(readingsData);
       setError(null);
     } catch (err) {

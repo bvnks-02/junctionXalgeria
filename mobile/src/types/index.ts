@@ -38,3 +38,16 @@ export type ParameterUnit = {
   criticalMin?: number;
   criticalMax?: number;
 };
+
+// API DTO Types
+export interface SensorReadingDTO {
+  pondId: number;
+  pageNumber: number;
+  pageSize: number;
+  parameter?: string;
+}
+
+export interface AlertDTO {
+  pageNumber: number;
+  pageSize: number;
+}
