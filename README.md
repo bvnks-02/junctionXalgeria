@@ -155,7 +155,6 @@ No hardware is needed. Sensors and qPCR results are simulated:
 ## 🧠 Contributors
 
 Built by Team **Ingeniums** during JunctionXAlgeria 2025  
-Contact: [yourname@example.com] or [LinkedIn link]
 
 ---
 
